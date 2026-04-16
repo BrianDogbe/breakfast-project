@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bite & Sips — Admin</title>
+  <link rel="stylesheet" href="./admin.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet" />
+  <style>
+    /* Prevent any flash of the admin dashboard before auth state is known. */
+    #app[hidden] { display: none !important; }
+    #order-drawer[hidden],
+    #drawer-backdrop[hidden] {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+  <div id="login-screen" class="login-screen">
+    <div class="login-card">
+      <div class="login-brand">
+        <span class="login-mark">☀</span>
+        <h1>Bite & Sips Admin</h1>
+        <p>Sign in to manage orders, kitchen prep, and pickup / delivery.</p>
+      </div>
+      <form id="login-form" class="login-form">
+        <div class="field">
+          <label for="login-email">Email</label>
+          <input type="email" id="login-email" autocomplete="username" required />
+        </div>
+        <div class="field">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" autocomplete="current-password" required />
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+        <p id="login-error" class="form-error" role="alert"></p>
+      </form>
+      <p class="login-hint">Sign in with the admin email and password from your backend <code>.env</code> (<code>ADMIN_EMAIL</code> / bcrypt <code>ADMIN_PASSWORD_HASH</code>).</p>
+    </div>
+  </div>
+
+  <div id="app" class="app" hidden>
+    <header class="admin-topbar">
+      <div class="topbar-inner">
+        <div class="topbar-title">
+          <span class="topbar-mark">☀</span>
+          <div>
+            <strong>Bite & Sips</strong>
+            <span class="topbar-sub">Order dashboard</span>
+          </div>
+        </div>
+        <div class="topbar-actions">
+          <button type="button" class="btn btn-ghost" id="btn-refresh" title="Refresh">Refresh</button>
+          <button type="button" class="btn btn-ghost" id="btn-signout">Sign out</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="admin-shell">
+      <aside class="admin-sidebar">
+        <nav class="side-nav">
+          <button type="button" class="side-nav-item is-active" data-view="orders">Orders</button>
+          <button type="button" class="side-nav-item" data-view="messages">Contact messages</button>
+        </nav>
+        <div class="side-footer">
+          <a href="./index.html" class="link-site">← Customer site</a>
+        </div>
+      </aside>
+
+      <main class="admin-main">
+        <section id="view-orders" class="view-panel is-visible">
+          <div class="stats-row" id="stats-row"></div>
+
+          <div class="toolbar">
+            <div class="toolbar-group">
+              <label class="toolbar-label" for="filter-status">Status</label>
+              <select id="filter-status" class="input-inline">
+                <option value="">All statuses</option>
+              </select>
+              <label class="toolbar-label" for="filter-type">Service</label>
+              <select id="filter-type" class="input-inline">
+                <option value="">All</option>
+                <option value="Dine-In">Dine‑In</option>
+                <option value="Pickup">Pickup</option>
+                <option value="Delivery">Delivery</option>
+              </select>
+            </div>
+            <div class="toolbar-group toolbar-grow">
+              <label class="toolbar-label sr-only" for="search-orders">Search</label>
+              <input type="search" id="search-orders" class="input-search" placeholder="Search name, phone, or order id…" />
+            </div>
+            <div class="toolbar-group bulk-bar" id="bulk-bar" hidden>
+              <span class="bulk-count"><span id="bulk-selected-count">0</span> selected</span>
+              <select id="bulk-status" class="input-inline">
+                <option value="">Set status…</option>
+              </select>
+              <button type="button" class="btn btn-sm btn-secondary" id="bulk-apply">Apply</button>
+              <button type="button" class="btn btn-sm btn-ghost" id="bulk-clear">Clear selection</button>
+              <button type="button" class="btn btn-sm btn-danger" id="bulk-delete">Delete selected</button>
+            </div>
+          </div>
+
+          <div class="orders-meta">
+            <label class="checkbox-inline">
+              <input type="checkbox" id="toggle-bulk" />
+              Multi-select
+            </label>
+            <span id="orders-count" class="muted"></span>
+          </div>
+
+          <div id="orders-list" class="orders-list"></div>
+          <p id="orders-empty" class="empty-state" hidden>No orders match your filters.</p>
+        </section>
+
+        <section id="view-messages" class="view-panel">
+          <h2 class="panel-heading">Contact messages</h2>
+          <p class="panel-lead">Messages sent from the website contact form.</p>
+          <div id="messages-list" class="messages-list"></div>
+          <p id="messages-empty" class="empty-state" hidden>No messages yet.</p>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- Order detail / edit drawer -->
+  <div id="drawer-backdrop" class="drawer-backdrop" hidden></div>
+  <aside id="order-drawer" class="order-drawer" hidden aria-hidden="true">
+    <div class="drawer-head">
+      <h2 id="drawer-title">Order</h2>
+      <button type="button" class="icon-close" id="drawer-close" aria-label="Close">×</button>
+    </div>
+    <div class="drawer-body" id="drawer-body">
+      <input type="hidden" id="edit-doc-id" />
+      <div class="drawer-section">
+        <h3>Workflow</h3>
+        <div id="acceptance-section" class="drawer-subsection">
+          <p class="food-ready-lead">Accept or decline this order</p>
+          <p class="muted">The customer does not see “accepted” or “declined”—only neutral updates until food prep starts.</p>
+          <div class="food-ready-actions acceptance-actions">
+            <button type="button" class="btn btn-food-ready" id="btn-accept-order">Accept order</button>
+            <button type="button" class="btn btn-danger" id="btn-decline-order">Decline order</button>
+          </div>
+        </div>
+        <div class="field">
+          <label for="edit-eta">Estimated ready <span class="muted">(customer sees this once prep is underway)</span></label>
+          <input type="time" id="edit-eta" />
+        </div>
+        <div class="field">
+          <label>Rider link <span class="muted">(share with the rider when leaving)</span></label>
+          <div class="field-row">
+            <input type="text" id="rider-link" readonly />
+            <button type="button" class="btn btn-secondary" id="btn-copy-rider-link">Copy</button>
+          </div>
+          <div style="margin-top:0.5rem; display:flex; gap:0.5rem; flex-wrap:wrap;">
+            <button type="button" class="btn btn-ghost" id="btn-regen-rider-link">Regenerate rider link</button>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="edit-rider-name">Rider name <span class="muted">(optional)</span></label>
+            <input type="text" id="edit-rider-name" placeholder="e.g. Kwame" />
+          </div>
+          <div class="field">
+            <label for="edit-rider-phone">Rider phone <span class="muted">(optional)</span></label>
+            <input type="tel" id="edit-rider-phone" placeholder="e.g. +233..." />
+          </div>
+        </div>
+        <div id="food-ready-banner" class="food-ready-banner" role="status" hidden></div>
+        <div id="food-ready-prompt" class="drawer-subsection">
+          <p class="food-ready-lead">Is the food ready for this customer?</p>
+          <div class="food-ready-actions">
+            <button type="button" class="btn btn-food-ready" id="btn-food-ready">Yes — food is ready</button>
+            <button type="button" class="btn btn-secondary" id="btn-food-not-ready">Not yet — still preparing</button>
+          </div>
+        </div>
+        <div class="field">
+          <label for="edit-status">Order status</label>
+          <select id="edit-status"></select>
+        </div>
+        <div class="field">
+          <label for="edit-prep-notes">Kitchen / internal notes</label>
+          <textarea id="edit-prep-notes" rows="3" placeholder="Allergies, rush order, substitution…"></textarea>
+        </div>
+      </div>
+      <div class="drawer-section">
+        <h3>Customer</h3>
+        <div class="field-row">
+          <div class="field">
+            <label for="edit-name">Name</label>
+            <input type="text" id="edit-name" />
+          </div>
+          <div class="field">
+            <label for="edit-phone">Phone</label>
+            <input type="tel" id="edit-phone" />
+          </div>
+        </div>
+        <div class="field">
+          <label for="edit-type">Service type</label>
+          <select id="edit-type">
+            <option value="Dine-In">Dine‑In</option>
+            <option value="Pickup">Pickup</option>
+            <option value="Delivery">Delivery</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="edit-address">Delivery address</label>
+          <input type="text" id="edit-address" placeholder="Only for delivery" />
+        </div>
+      </div>
+      <div class="drawer-section">
+        <h3>Line items</h3>
+        <div id="edit-cart-preview" class="cart-preview"></div>
+      </div>
+      <div class="drawer-section">
+        <h3>Pricing (GHS)</h3>
+        <div class="pricing-readonly" id="edit-pricing"></div>
+      </div>
+      <div class="drawer-actions">
+        <button type="button" class="btn btn-primary" id="btn-save-order">Save changes</button>
+        <button type="button" class="btn btn-secondary" id="btn-print-ticket">Print ticket</button>
+        <button type="button" class="btn btn-danger" id="btn-delete-order">Delete order</button>
+        <span id="drawer-status" class="drawer-status" aria-live="polite"></span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Used for "new order placed" notifications (set/replace `notification.mp3`). -->
+  <audio id="order-sound" preload="auto" src="./notification.mp3"></audio>
+
+  <script src="./config.js"></script>
+  <script src="./admin.js"></script>
+</body>
+</html>

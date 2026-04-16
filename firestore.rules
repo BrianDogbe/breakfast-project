@@ -1,0 +1,38 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Customer checkout and contact form may create documents without signing in.
+    // Only signed-in admins (Firebase Authentication) can read, update, or delete.
+    match /orders/{orderId} {
+      allow create: if true;
+      // Customer can read one order by id (for live tracking); listing all orders stays admin-only.
+      allow get: if true;
+      allow list: if request.auth != null;
+      allow delete: if request.auth != null;
+
+      function changedKeysOnly(keys) {
+        return request.resource.data.diff(resource.data).changedKeys().hasOnly(keys);
+      }
+
+      function tokenMatches(fieldName) {
+        return request.resource.data[fieldName] == resource.data[fieldName];
+      }
+
+      // Admin can update everything.
+      allow update: if request.auth != null
+        // Customer can only update their own live location (with token).
+        || (tokenMatches("customerToken") && changedKeysOnly(["customerLocation", "updatedAt", "customerToken"]))
+        // Rider can only update their own live location (with token).
+        || (tokenMatches("riderToken") && changedKeysOnly(["riderLocation", "updatedAt", "riderToken"]));
+    }
+
+    match /contact_messages/{msgId} {
+      allow create: if true;
+      allow read, update, delete: if request.auth != null;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

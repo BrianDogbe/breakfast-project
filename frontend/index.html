@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bite & Sips</title>
+  <meta name="description" content="Bite & Sips is a cafeteria with awesome and delicious food." />
+  <meta name="keywords" content="cafeteria, breakfast, lunch, supper, dinner, takeaway, local, food, delivery, menu, contact" />
+  <link rel="stylesheet" href="./breakfast.css" />
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="header">
+    <div class="container header-inner">
+      <div class="logo">
+        <span class="logo-mark">☀</span>
+        <span class="logo-text">Bite & Sips</span>
+      </div>
+      <nav class="nav">
+        <a href="#hero">Home</a>
+        <a href="#menu">Menu</a>
+        <a href="#about">About</a>
+        <a href="#visit">Visit</a>
+        <a href="#order" class="btn btn-sm primary">Order Ahead</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section id="hero" class="hero">
+      <div class="container hero-inner">
+        <div class="hero-copy">
+          <p class="eyebrow">Fresh & made with love</p>
+          <h1>Your neighborhood cafeteria—dine in or pick up.</h1>
+          <p class="hero-subtitle">Order your favorite meals, enjoy them here, or schedule a pickup for later—fresh, fast, and made with love.</p>
+          <div class="hero-actions">
+            <a href="#menu" class="btn primary">View Menu</a>
+            <a href="#order" class="btn ghost">How Ordering Works</a>
+          </div>
+          <div class="hero-meta">
+            <div>
+              <strong>7:00 AM – 10:00 PM</strong>
+              <span>Open every day</span>
+            </div>
+            <div>
+              <strong>+233 (24) 469‑3556<br>+233 (20) 877‑6155</strong>
+              <span>Call or text to place your order</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="menu" class="section section-alt">
+      <div class="container">
+        <div class="section-header">
+          <h2>Our Menu</h2>
+          <p>Classic comfort and modern favorites, always made to order.</p>
+          <p class="help-text menu-browse-note">Browse here for prices and options. To order, use the dropdown in the <a href="#order">Checkout</a> section.</p>
+        </div>
+        <div class="menu-cards" id="menu-cards" aria-label="Menu items">
+          <article class="menu-card" data-menu-group="sandwiches" data-item-id="beef-sandwich" data-item-name="Beef Sandwich" data-item-price="45">
+            <div class="menu-card-body">
+              <h3>Beef Sandwich</h3>
+              <p>Beef, Egg, Veggies & Mayonnaise</p>
+            </div>
+            <div class="menu-card-meta">
+              <span class="price">GHS 45.00</span>
+            </div>
+          </article>
+
+          <article class="menu-card" data-menu-group="sandwiches" data-item-id="chicken-sandwich" data-item-name="Chicken Sandwich" data-item-price="45">
+            <div class="menu-card-body">
+              <h3>Chicken Sandwich</h3>
+              <p>Chicken, Egg, Veggies & Mayonnaise</p>
+            </div>
+            <div class="menu-card-meta">
+              <span class="price">GHS 45.00</span>
+            </div>
+          </article>
+
+          <article class="menu-card" data-menu-group="shawarma" data-item-id="beef-shawarma" data-item-name="Beef Shawarma" data-item-price="50">
+            <div class="menu-card-body">
+              <h3>Beef Shawarma</h3>
+              <p>Comes with a house sauce & veggies</p>
+            </div>
+            <div class="menu-card-meta">
+              <span class="price">GHS 50.00</span>
+            </div>
+          </article>
+
+          <article class="menu-card" data-menu-group="shawarma" data-item-id="chicken-shawarma" data-item-name="Chicken Shawarma" data-item-price="50">
+            <div class="menu-card-body">
+              <h3>Chicken Shawarma</h3>
+              <p>Comes with a house sauce & veggies</p>
+            </div>
+            <div class="menu-card-meta">
+              <span class="price">GHS 50.00</span>
+            </div>
+          </article>
+
+          <article class="menu-card" data-menu-group="more" data-item-id="beverages" data-item-name="Beverages" data-item-price="27">
+            <div class="menu-card-body">
+              <h3>Beverages</h3>
+              <p>Mixed with sugar and milk</p>
+            </div>
+            <div class="menu-card-meta">
+              <span class="price">From GHS 27.00</span>
+            </div>
+          </article>
+
+          <article class="menu-card" data-menu-group="more" data-item-id="oatmeal-bowl" data-item-name="Oatmeal Bowl" data-item-price="35">
+            <div class="menu-card-body">
+              <h3>Oatmeal Bowl</h3>
+              <p>Steel-cut oats with brown sugar, berries & toasted almonds.</p>
+            </div>
+            <div class="menu-card-meta">
+              <span class="price">GHS 35.00</span>
+            </div>
+          </article>
+
+          <article class="menu-card" data-menu-group="drinks" data-item-id="house-coffee" data-item-name="House Coffee" data-item-price="25">
+            <div class="menu-card-body">
+              <h3>House Coffee</h3>
+              <p>Locally roasted, bottomless refills in-house.</p>
+            </div>
+            <div class="menu-card-meta">
+              <span class="price">GHS 25.00</span>
+            </div>
+          </article>
+
+          <article class="menu-card" data-menu-group="drinks" data-item-id="latte" data-item-name="Cappuccino / Latte" data-item-price="30">
+            <div class="menu-card-body">
+              <h3>Cappuccino / Latte</h3>
+              <p>Espresso with steamed milk, classic or flavored.</p>
+            </div>
+            <div class="menu-card-meta">
+              <span class="price">GHS 30.00</span>
+            </div>
+          </article>
+
+          <article class="menu-card" data-menu-group="drinks" data-item-id="fresh-juice" data-item-name="Fresh Juice" data-item-price="28">
+            <div class="menu-card-body">
+              <h3>Fresh Juice</h3>
+              <p>Fresh‑squeezed every morning.</p>
+            </div>
+            <div class="menu-card-meta">
+              <span class="price">GHS 28.00</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="section">
+      <div class="container about-grid">
+        <div>
+          <h2>Made from scratch every day.</h2>
+          <p>Bite & Sips is a cafeteria focused on delicious food. We source ingredients whenever possible and prepare everything in small batches so it’s always fresh.</p>
+          <p>Place your order and dine in, or choose pickup for later—perfect for busy mornings, lunch, supper, commutes, and office meals.</p>
+        </div>
+        <div class="about-cards">
+          <article class="info-card">
+            <h3>Seasonal Ingredients</h3>
+            <p>Our menu changes with the seasons, highlighting the freshest produce and flavors.</p>
+          </article>
+          <article class="info-card">
+            <h3>Grab-&-Go Convenience</h3>
+            <p>Designed for takeout, so you can get great breakfast quickly and enjoy it wherever you like.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="visit" class="section section-alt">
+      <div class="container visit-grid">
+        <div>
+          <h2>Visit Us</h2>
+          <p><strong>Address</strong><br>D/22 Community 7, Tema</p>
+          <p><strong>Hours</strong><br>Monday – Saturday<br>7:00 AM – 10:00 PM<br>Sunday<br>2:00 PM – 10:00 PM</p>
+          <p><strong>Phone</strong><br>+233 (24) 469‑3556<br>+233 (20) 877‑6155</p>
+        </div>
+        <div>
+          <h3>Quick Contact</h3>
+          <form id="contact-form" class="card">
+            <div class="field">
+              <label for="name">Name</label>
+              <input type="text" id="name" name="name" placeholder="Your name" required />
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" placeholder="you@example.com" required />
+            </div>
+            <div class="field">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" rows="3" placeholder="Ask about catering, large groups, or anything else." required></textarea>
+            </div>
+            <button type="submit" class="btn primary full-width">Send Message</button>
+            <p id="form-status" class="form-status" aria-live="polite"></p>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <section id="order" class="section reservation">
+      <div class="container order-layout">
+        <header class="checkout-page-head">
+          <p class="checkout-eyebrow">Order online</p>
+          <h2>Checkout</h2>
+          <p class="checkout-lead">Three short steps: pick your food by category, tell us how to serve it, then review your cart and send the order.</p>
+        </header>
+
+        <div class="checkout-grid">
+          <div class="checkout-main">
+            <article class="checkout-panel checkout-panel--food">
+              <div class="checkout-panel-head">
+                <span class="checkout-step-badge" aria-hidden="true">1</span>
+                <div class="checkout-panel-head-text">
+                  <h3 class="checkout-panel-title">Add to your order</h3>
+                  <p class="checkout-panel-desc">Dishes are grouped so the list stays short. Pick one, then open customization.</p>
+                </div>
+              </div>
+              <div class="food-picker-inner">
+                <label class="food-picker-label" for="food-picker">Choose a dish</label>
+                <div class="food-picker-wrap">
+                  <select id="food-picker" class="food-picker food-picker--checkout" aria-describedby="food-picker-help">
+                    <option value="">Pick a category, then a dish…</option>
+                  </select>
+                </div>
+                <button type="button" class="btn primary open-customize-btn" id="open-customize" disabled>
+                  Customize &amp; add to cart
+                </button>
+                <p id="food-picker-help" class="help-text">
+                  Same items &amp; prices as the <a href="#menu">menu</a>. You’ll set quantity and add-ons in the pop-up.
+                </p>
+              </div>
+            </article>
+
+            <article class="checkout-panel checkout-panel--details">
+              <div class="checkout-panel-head">
+                <span class="checkout-step-badge" aria-hidden="true">2</span>
+                <div class="checkout-panel-head-text">
+                  <h3 class="checkout-panel-title">Your details</h3>
+                  <p class="checkout-panel-desc">Contact and how you’d like to receive your order.</p>
+                </div>
+              </div>
+              <form id="reservation-form" class="checkout-details-form" novalidate>
+                <div class="field">
+                  <label for="res-name">Name</label>
+                  <input type="text" id="res-name" name="res-name" placeholder="Your name" required />
+                </div>
+                <div class="field">
+                  <label for="res-phone">Phone</label>
+                  <input type="tel" id="res-phone" name="res-phone" placeholder="Your phone number" required />
+                </div>
+                <div class="field">
+                  <label for="res-type">Order type</label>
+                  <select id="res-type" name="res-type" required>
+                    <option value="" selected disabled>Choose one</option>
+                    <option value="Dine-In">Dine‑In</option>
+                    <option value="Pickup">Pickup</option>
+                    <option value="Delivery">Delivery</option>
+                  </select>
+                </div>
+                <div class="field field--full">
+                  <label for="res-address">Delivery address <span class="label-hint">(only if delivery)</span></label>
+                  <input type="text" id="res-address" name="res-address" placeholder="Street, area, landmark" />
+                </div>
+              </form>
+            </article>
+          </div>
+
+          <aside class="checkout-aside" aria-label="Cart and total">
+            <article class="checkout-panel checkout-panel--summary">
+              <div class="checkout-panel-head">
+                <span class="checkout-step-badge" aria-hidden="true">3</span>
+                <div class="checkout-panel-head-text">
+                  <h3 class="checkout-panel-title">Cart &amp; total</h3>
+                  <p class="checkout-panel-desc">Review items and totals, then place your order.</p>
+                </div>
+              </div>
+              <div class="cart card cart--checkout" aria-label="Your cart">
+                <div class="cart-header">
+                  <h4 class="cart-title">Your cart</h4>
+                  <button type="button" class="link-btn" id="clear-cart">Clear</button>
+                </div>
+                <div id="cart-items" class="cart-items">
+                  <p class="muted" id="cart-empty">Nothing here yet. Add a dish from step 1.</p>
+                </div>
+                <div class="cart-summary">
+                  <div class="row">
+                    <span>Subtotal</span>
+                    <strong id="cart-subtotal">GHS 0.00</strong>
+                  </div>
+                  <div class="row">
+                    <span>Delivery</span>
+                    <strong id="cart-delivery">GHS 0.00</strong>
+                  </div>
+                  <div class="row total">
+                    <span>Total</span>
+                    <strong id="cart-total">GHS 0.00</strong>
+                  </div>
+                </div>
+              </div>
+              <button type="submit" class="btn secondary checkout-place-btn" form="reservation-form" id="place-order">
+                Place order
+              </button>
+              <p id="reservation-status" class="form-status checkout-status" aria-live="polite"></p>
+            </article>
+          </aside>
+        </div>
+
+        <article class="checkout-panel checkout-panel--summary order-track-card" id="order-track-panel" hidden>
+          <div class="order-track-head">
+            <div>
+              <p class="checkout-eyebrow order-track-eyebrow">Live order</p>
+              <h3 class="order-track-title">Track your order</h3>
+              <p class="order-track-lead muted" id="order-track-lead">Hang tight—we’ll keep this page updated.</p>
+            </div>
+            <button type="button" class="link-btn" id="order-track-dismiss" hidden>Stop tracking</button>
+          </div>
+          <p class="order-track-eta" id="order-track-eta" hidden></p>
+          <div id="order-track-rider" class="order-track-rider" hidden>
+            <div class="order-track-rider-top">
+              <div>
+                <strong id="order-track-rider-name">Rider</strong>
+                <div class="muted" id="order-track-rider-phone"></div>
+              </div>
+              <a class="btn ghost btn-call-rider" id="order-track-call-rider" href="#" hidden>Call rider</a>
+            </div>
+          </div>
+          <ol class="delivery-timeline" id="order-track-timeline" aria-label="Order progress"></ol>
+          <div id="order-track-map-wrap" class="order-track-map-wrap" hidden>
+            <div id="order-track-map" class="order-track-map" role="region" aria-label="Delivery map"></div>
+            <p class="muted order-track-map-hint" id="order-track-map-hint">Turn on location to see live delivery.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <div class="sheet-backdrop" id="sheet-backdrop" hidden></div>
+  <section class="sheet" id="item-sheet" aria-hidden="true" role="dialog" aria-label="Customize item" hidden>
+    <div class="sheet-handle"></div>
+    <div class="sheet-header">
+      <div>
+        <h3 id="sheet-title">Item</h3>
+        <p class="muted" id="sheet-desc">Customize your item</p>
+      </div>
+      <button type="button" class="icon-btn" id="sheet-close" aria-label="Close">✕</button>
+    </div>
+
+    <div class="sheet-body">
+      <div class="sheet-section">
+        <div class="row spread">
+          <strong>Quantity</strong>
+          <div class="qty">
+            <button type="button" class="qty-btn" id="qty-dec" aria-label="Decrease quantity">−</button>
+            <span id="qty-value" class="qty-value">1</span>
+            <button type="button" class="qty-btn" id="qty-inc" aria-label="Increase quantity">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="sheet-section">
+        <label class="field">
+          <span class="label">Special instructions (optional)</span>
+          <input type="text" id="opt-notes" placeholder="E.g. no onions, well toasted..." />
+        </label>
+      </div>
+    </div>
+
+    <div class="sheet-footer">
+      <div class="row spread">
+        <div>
+          <div class="muted">Item total</div>
+          <strong id="sheet-total">GHS 0.00</strong>
+        </div>
+        <button type="button" class="btn primary" id="add-to-cart">Add to Cart</button>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p>© <span id="year"></span> Bite & Sips. All rights reserved.</p>
+      <p class="footer-small">Designed for a perfect start to your day.</p>
+    </div>
+  </footer>
+
+  <script src="./config.js"></script>
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
+  <script src="./breakfast.js"></script>
+</body>
+</html>
+
